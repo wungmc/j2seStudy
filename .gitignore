@@ -1,11 +1,11 @@
 *.class
 
 # Package Files #
-10	*.jar
-11	*.war
-12	*.ear
+*.jar
+*.war
+*.ear
 
-# Intellij
+#Intellij
 *.iml
 .idea/*
-out/*
+out/
