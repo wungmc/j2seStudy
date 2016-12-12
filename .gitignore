@@ -5,5 +5,7 @@
 *.war
 *.ear
 
-#Intellij
+# Intellij
+*.iml
+.idea/*
 out/
