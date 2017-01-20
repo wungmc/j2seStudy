@@ -3,6 +3,17 @@ package com.wung.properties;
 import java.util.Properties;
 import java.io.*;
 
+/*
+    注意 getResourceAsStream() 方法，资源文件的路径写法：
+    1、getResourceAsStream("set.properties"); 时，资源文件要和该类处于同一个目录下
+    2、getResourceAsStream("/set.propertiest"); 时，表示从 src 目录下找
+    3、如果资源文件不在 src 目录下，而是处于文件系统的其他目录下，该方法则不能正确加载，
+    可以用如下方法：
+    prop.load(new FileInputStream("/home/username/resource/set.properties"));
+
+
+ */
+
 //this class is used to read properties
 public class GetProperties {
 
