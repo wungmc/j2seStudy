@@ -12,10 +12,12 @@ import java.util.List;
  * 将对象转换成 json 格式，并写入 response 中。
  */
 public class JSONService {
-	
-	public JSONService(){
-		
-	}
+    private static final String CONTENT_TYPE_TEXT = "text/html";
+    private static final String CONTENT_TYPE_JSON = "text/json";
+
+    private static final String CHARSET_UTF8 = "UTF-8";
+
+	public JSONService() {}
 
 	//List
 	public static String listToJson(List<?> list){
@@ -32,45 +34,43 @@ public class JSONService {
 	    writeJsonIntoResponse(response,beanToJSON(bean));
 	}
 
+    //将未转换的bean(map,普通类)放入HttpServletResponse内 按照指定编码
+    public static void writeBeanIntoResponse(HttpServletResponse response,Object bean, String charset) {
+        writeJsonIntoResponse(response,beanToJSON(bean), charset);
+    }
+
+
 	//将未转换的list放入HttpServletResponse内
 	public static void  writeListIntoResponse(HttpServletResponse response,List<?> list) {
 	    writeJsonIntoResponse(response,listToJson(list));
 	}
-	
+
+    //将未转换的list放入HttpServletResponse内 按照指定编码
+    public static void  writeListIntoResponse(HttpServletResponse response,List<?> list, String charset) {
+        writeJsonIntoResponse(response,listToJson(list), charset);
+    }
+
+
     public static void writeStringIntoResponse(HttpServletResponse response, String str) {
-        response.setHeader("Cache-Control", "no-cache");
-        response.setContentType("text/html; charset=UTF-8");
-        writeString2Response(response, str);
+        writeStringIntoResponse(response, str, CHARSET_UTF8);
     }
-
-    //将转换好的json数据放入HttpServletResponse内
-    private static void writeJsonIntoResponse(HttpServletResponse response, String json) {
-        response.setHeader("Cache-Control", "no-cache");
-        response.setContentType("text/json; charset=UTF-8");
-        writeString2Response(response, json);
-    }
-
-
-	//将未转换的bean(map,普通类)放入HttpServletResponse内 按照指定编码
-	public static void writeBeanIntoResponse(HttpServletResponse response,Object bean, String charset) {
-		writeJsonIntoResponse(response,beanToJSON(bean), charset);
-	}
-
-	//将未转换的list放入HttpServletResponse内 按照指定编码
-	public static void  writeListIntoResponse(HttpServletResponse response,List<?> list, String charset) {
-		writeJsonIntoResponse(response,listToJson(list), charset);
-	}
 
     public static void writeStringIntoResponse(HttpServletResponse response, String string, String charset) {
         response.setHeader("Cache-Control", "no-cache");
-        response.setContentType("text/html; charset=" + charset);
+        response.setContentType(CONTENT_TYPE_TEXT + "; charset=" + charset);
         writeString2Response(response, string);
     }
 
+
+    //将转换好的json数据放入HttpServletResponse内
+    private static void writeJsonIntoResponse(HttpServletResponse response, String json) {
+        writeJsonIntoResponse(response, json, CHARSET_UTF8);
+    }
+
     //将转换好的json数据放入HttpServletResponse内  按照指定编码
-    public static void writeJsonIntoResponse(HttpServletResponse response, String json, String charset) {
+    private static void writeJsonIntoResponse(HttpServletResponse response, String json, String charset) {
         response.setHeader("Cache-Control", "no-cache");
-        response.setContentType("text/json; charset=" + charset);
+        response.setContentType(CONTENT_TYPE_JSON + "; charset=" + charset);
         writeString2Response(response, json);
     }
 
@@ -84,8 +84,10 @@ public class JSONService {
             out.write("error");
             e.printStackTrace();
         } finally {
-            out.flush();
-            out.close();
+            if (out != null) {
+                out.flush();
+                out.close();
+            }
         }
     }
 
