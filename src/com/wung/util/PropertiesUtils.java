@@ -91,4 +91,45 @@ public class PropertiesUtils {
         }
         return null;
     }
+
+
+    /**
+     * 将某对象的 List 集合转换成 Map 集合，key 为对象的 propertyName 属性的值， value 为该对象
+     * @param objs
+     * @param propertyName
+     * @param <V>
+     * @param <T>
+     * @return
+     */
+    public static  <V, T> Map<V, T> convertList2Map(List<T> objs, String propertyName) {
+        if (objs == null || objs.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Class<?> clazz = objs.get(0).getClass();
+        Field field = getField(clazz, propertyName);
+        if (field == null) {
+            throw new RuntimeException(propertyName + " 属性不存在！");
+        }
+
+        Method propertyMethod = getGetMethod(clazz, propertyName);
+        if (propertyMethod == null) {
+            throw new RuntimeException(propertyName + " 属性没有 public 类型的 get 方法！");
+        }
+
+        Map<V, T> map = new HashMap<>(objs.size());
+        for (T obj : objs) {
+            try {
+                V value = (V)propertyMethod.invoke(obj);
+                if (value != null) {
+                    map.put(value, obj);
+                }
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+                return Collections.emptyMap();
+            }
+        }
+
+        return map;
+    }
 }
