@@ -132,4 +132,41 @@ public class PropertiesUtils {
 
         return map;
     }
+
+
+    /**
+     * 判断对象是否为空，复杂对象时：如果有属性不为空，则对象不为空
+     * 注意：不支持属性为复杂对象的校验
+     * @param obj
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean isEmpty(T obj) {
+        if (obj == null) {
+            return true;
+        }
+        if (obj instanceof String && obj.equals("")) {
+            return true;
+        }
+
+        Method[] methods = obj.getClass().getDeclaredMethods();
+        if (methods.length == 0) {
+            return true;
+        }
+        try {
+            for (Method method : methods) {
+                if (method.getName().startsWith("get")) {
+                    Object value = method.invoke(obj);
+                    if (value != null && !"".equals(value)) {
+                        return false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        }
+
+        return true;
+    }
 }
