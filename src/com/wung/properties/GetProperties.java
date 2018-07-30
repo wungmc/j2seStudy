@@ -14,7 +14,6 @@ import java.io.*;
 
  */
 
-//this class is used to read properties
 public class GetProperties {
 
 	private InputStream is;// 用于读取（.properties）文件
