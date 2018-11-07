@@ -14,7 +14,7 @@ import java.io.File;
  *
  * @author wung 2018/11/6.
  */
-public class GroovyScriptRun {
+public class RunGroovyScriptByGroovyClassLoader {
 	
 	public static void main(String[] args) throws Exception {
 		final GroovyClassLoader classLoader = new GroovyClassLoader();
