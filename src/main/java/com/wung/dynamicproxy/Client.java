@@ -15,3 +15,9 @@ public class Client {
         System.out.println(sellTicket.getClass());
     }
 }
+
+// out
+// before........
+// sell a ticket.
+// after........
+// class com.sun.proxy.$Proxy0
