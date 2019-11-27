@@ -7,6 +7,7 @@
 
 # Intellij
 out/
+*.iml
 
 
 /.idea/
